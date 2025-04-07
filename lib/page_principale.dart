@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'balle.dart';
 import 'batte.dart';
 
-// Enumération pour gérer les quatre directions possibles
+// gérer les quatre directions possibles
 enum Direction { haut, bas, gauche, droite }
 
 class PagePrincipale extends StatefulWidget {
@@ -15,11 +15,11 @@ class PagePrincipale extends StatefulWidget {
 
 class _PagePrincipaleState extends State<PagePrincipale>
     with SingleTickerProviderStateMixin {
-  // Dimensions de la zone de jeu
-  double largeur = 0;     // Largeur de l’espace disponible
-  double hauteur = 0;     // Hauteur de l’espace disponible
+  
+  double largeur = 0;     
+  double hauteur = 0;    
 
-  // Position de la balle
+  
   double posX = 0;
   double posY = 0;
 
@@ -35,14 +35,13 @@ class _PagePrincipaleState extends State<PagePrincipale>
   // Vitesse de déplacement de la balle
   double increment = 5;
 
-  // Variables pour gérer la direction
-  Direction hDir = Direction.gauche;  // Direction horizontale
-  Direction vDir = Direction.bas;     // Direction verticale
+  // la direction
+  Direction hDir = Direction.gauche;  // direction horizontale
+  Direction vDir = Direction.bas;     // verticale
 
-  // Score
   int score = 0;
 
-  // Facteurs aléatoires pour rendre la vitesse ou l’angle moins prévisible
+  //  rendre la vitesse ou l’angle moins prévisible
   double randX = 1; 
   double randY = 1;
 
@@ -54,8 +53,8 @@ class _PagePrincipaleState extends State<PagePrincipale>
     posY = 0;
 
     // Création du contrôleur d’animation
-    // On choisit par exemple 10 000 minutes pour que l’animation tourne "indéfiniment"
-    // (ou tout autre durée très longue)
+    // On choisit 10 000 minutes pour que l’animation tourne "indéfiniment"
+    
     controleur = AnimationController(
       duration: const Duration(minutes: 10000),
       vsync: this,
@@ -65,7 +64,7 @@ class _PagePrincipaleState extends State<PagePrincipale>
     // pour appeler setState() et déplacer la balle manuellement.
     animation = Tween<double>(begin: 0, end: 100).animate(controleur);
 
-    // Listener appelé à chaque "frame" de l’animation (~60 fois/s)
+    // On randomise la direction horizontale et verticale
     animation.addListener(() {
       safeSetState(() {
         // Déplacement horizontal
@@ -81,7 +80,7 @@ class _PagePrincipaleState extends State<PagePrincipale>
           posY -= ((increment * randY).round());
         }
       });
-      // Vérifier les collisions avec les bords ou la batte
+      // checker les collisions avec les bords ou la batte
       testerBordures();
     });
 
@@ -105,12 +104,12 @@ class _PagePrincipaleState extends State<PagePrincipale>
     }
   }
 
-  // Méthode pour déplacer la batte via le Drag horizontal
+  // déplacer la batte via le Drag horizontal
   void deplacerBatte(DragUpdateDetails maj, BuildContext context) {
     safeSetState(() {
       // Ajout du delta.x à la position de la batte
       positionBatte += maj.delta.dx;
-      // On peut empêcher la batte de sortir de l’écran si on le souhaite
+      // empêcher la batte de sortir de l’écran 
       if (positionBatte < 0) {
         positionBatte = 0;
       }
@@ -120,7 +119,7 @@ class _PagePrincipaleState extends State<PagePrincipale>
     });
   }
 
-  // Méthode pour gérer les rebonds et la fin de partie
+  // gérer les rebonds et la fin de partie
   void testerBordures() {
     // Diamètre de la balle
     double diametreBalle = Balle.diametre;
@@ -148,7 +147,7 @@ class _PagePrincipaleState extends State<PagePrincipale>
     }
     // 4) Rebond en bas => vérif si touche la batte ou non
     if (posY >= hauteur - diametreBalle) {
-      // La balle arrive sur le bas. Vérifions la position horizontale
+      // La balle arrive sur le bas. checker la position horizontale
       double centreBalle = posX + diametreBalle / 2;
 
       // Position de la batte [positionBatte .. (positionBatte+largeurBatte)]
@@ -158,7 +157,6 @@ class _PagePrincipaleState extends State<PagePrincipale>
         // Touché : on rebondit
         vDir = Direction.haut;
         posY = hauteur - diametreBalle;
-        // On incrémente le score
         score++;
         // On randomise l’angle vertical
         randY = nombreAleatoire();
@@ -213,9 +211,6 @@ class _PagePrincipaleState extends State<PagePrincipale>
 
   // Génère un nombre aléatoire entre 0.5 et 1.5
   double nombreAleatoire() {
-    // math.Random().nextInt(101) génère un entier de 0 à 100
-    // on ajoute 50 => de 50 à 150
-    // puis on divise par 100 => de 0.5 à 1.5
     return (math.Random().nextInt(101) + 50) / 100;
   }
 
@@ -227,7 +222,7 @@ class _PagePrincipaleState extends State<PagePrincipale>
         hauteur = contraintes.maxHeight;
         largeur = contraintes.maxWidth;
 
-        // Mise à jour de la taille de la batte (ex : 20% en largeur, 5% en hauteur)
+        // Mise à jour de la taille de la batte 
         largeurBatte = largeur / 5;
         hauteurBatte = hauteur / 20;
 
